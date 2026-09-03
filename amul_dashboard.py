@@ -133,36 +133,46 @@ tab_overview, tab_ratings, tab_open, tab_raw = st.tabs(
 with tab_overview:
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Responses", len(df))
-   if rating_cols_present:
-    overall_mean = df[rating_cols_present].mean().mean()
-    c2.metric("Overall avg rating (1–5)", f"{overall_mean:.2f}")
-    best_q = df[rating_cols_present].mean().idxmax()
-    worst_q = df[rating_cols_present].mean().idxmin()
-    c3.metric("Strongest metric", best_q.split(") ", 1)[-1])
-    c4.metric("Weakest metric", worst_q.split(") ", 1)[-1])
 
-    st.markdown("### 🔍 Key Insights")
+    if rating_cols_present:
+        overall_mean = df[rating_cols_present].mean().mean()
+        c2.metric("Overall avg rating (1–5)", f"{overall_mean:.2f}")
 
-    best_label = best_q.split(") ", 1)[-1]
-    worst_label = worst_q.split(") ", 1)[-1]
+        best_q = df[rating_cols_present].mean().idxmax()
+        worst_q = df[rating_cols_present].mean().idxmin()
 
-    st.success(f"Amul performs strongest in **{best_label}** among Gen Z respondents.")
-    st.warning(f"Relatively weaker perception in **{worst_label}**, indicating scope for improvement.")
+        c3.metric("Strongest metric", best_q.split(") ", 1)[-1])
+        c4.metric("Weakest metric", worst_q.split(") ", 1)[-1])
 
-    st.markdown("### Average score per question (Q4–Q10)")
-    means = df[selected_questions].mean().sort_values(ascending=False)
-    fig = px.bar(
-        means,
-        x=means.values,
-        y=[c.split(") ", 1)[-1] for c in means.index],
-        orientation="h",
-        text=[f"{v:.2f}" for v in means.values],
-        labels={"x": "Average rating (1–5)", "y": ""},
-        color=means.values,
-        color_continuous_scale="Blues",
-    )
-    fig.update_layout(coloraxis_showscale=False, yaxis=dict(autorange="reversed"))
-    st.plotly_chart(fig, use_container_width=True)
+        st.markdown("### 🔍 Key Insights")
+
+        best_label = best_q.split(") ", 1)[-1]
+        worst_label = worst_q.split(") ", 1)[-1]
+
+        st.success(f"Amul performs strongest in **{best_label}** among Gen Z respondents.")
+        st.warning(f"Relatively weaker perception in **{worst_label}**, indicating scope for improvement.")
+
+        st.markdown("### Average score per question (Q4–Q10)")
+
+        means = df[selected_questions].mean().sort_values(ascending=False)
+
+        fig = px.bar(
+            means,
+            x=means.values,
+            y=[c.split(") ", 1)[-1] for c in means.index],
+            orientation="h",
+            text=[f"{v:.2f}" for v in means.values],
+            labels={"x": "Average rating (1–5)", "y": ""},
+            color=means.values,
+            color_continuous_scale="Blues",
+        )
+
+        fig.update_layout(
+            coloraxis_showscale=False,
+            yaxis=dict(autorange="reversed")
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("### Top-of-mind words (Q1)")
     top_words = tokenize(df[list(OPEN_COLS.keys())[0]]).most_common(10)
