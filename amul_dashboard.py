@@ -117,6 +117,7 @@ sort_choice = st.sidebar.radio(
 # HEADER
 # --------------------------------------------------------------------------
 st.title("🥛 Amul Gen-Z Perception Survey — Dashboard")
+st.info("This dashboard analyzes Gen Z perception of Amul across awareness, trust, innovation, and brand loyalty.")
 st.caption(
     "Interactive summary of open-ended brand associations (Q1–Q3) and "
     "rated brand-health metrics (Q4–Q10)."
@@ -139,6 +140,13 @@ with tab_overview:
         worst_q = df[rating_cols_present].mean().idxmin()
         c3.metric("Strongest metric", best_q.split(") ", 1)[-1])
         c4.metric("Weakest metric", worst_q.split(") ", 1)[-1])
+        st.markdown("### 🔍 Key Insights")
+
+best_label = best_q.split(") ", 1)[-1]
+worst_label = worst_q.split(") ", 1)[-1]
+
+st.success(f"Amul performs strongest in **{best_label}** among Gen Z respondents.")
+st.warning(f"Relatively weaker perception in **{worst_label}**, indicating scope for improvement.")
 
     st.markdown("### Average score per question (Q4–Q10)")
     means = df[selected_questions].mean().sort_values(ascending=False)
