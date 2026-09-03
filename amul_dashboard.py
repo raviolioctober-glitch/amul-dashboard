@@ -133,20 +133,21 @@ tab_overview, tab_ratings, tab_open, tab_raw = st.tabs(
 with tab_overview:
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Responses", len(df))
-    if rating_cols_present:
-        overall_mean = df[rating_cols_present].mean().mean()
-        c2.metric("Overall avg rating (1–5)", f"{overall_mean:.2f}")
-        best_q = df[rating_cols_present].mean().idxmax()
-        worst_q = df[rating_cols_present].mean().idxmin()
-        c3.metric("Strongest metric", best_q.split(") ", 1)[-1])
-        c4.metric("Weakest metric", worst_q.split(") ", 1)[-1])
-        st.markdown("### 🔍 Key Insights")
+   if rating_cols_present:
+    overall_mean = df[rating_cols_present].mean().mean()
+    c2.metric("Overall avg rating (1–5)", f"{overall_mean:.2f}")
+    best_q = df[rating_cols_present].mean().idxmax()
+    worst_q = df[rating_cols_present].mean().idxmin()
+    c3.metric("Strongest metric", best_q.split(") ", 1)[-1])
+    c4.metric("Weakest metric", worst_q.split(") ", 1)[-1])
 
-best_label = best_q.split(") ", 1)[-1]
-worst_label = worst_q.split(") ", 1)[-1]
+    st.markdown("### 🔍 Key Insights")
 
-st.success(f"Amul performs strongest in **{best_label}** among Gen Z respondents.")
-st.warning(f"Relatively weaker perception in **{worst_label}**, indicating scope for improvement.")
+    best_label = best_q.split(") ", 1)[-1]
+    worst_label = worst_q.split(") ", 1)[-1]
+
+    st.success(f"Amul performs strongest in **{best_label}** among Gen Z respondents.")
+    st.warning(f"Relatively weaker perception in **{worst_label}**, indicating scope for improvement.")
 
     st.markdown("### Average score per question (Q4–Q10)")
     means = df[selected_questions].mean().sort_values(ascending=False)
